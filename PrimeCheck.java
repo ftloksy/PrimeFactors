@@ -8,21 +8,23 @@ public class PrimeCheck {
       that is small then you input,
     */
 
-  static ArrayList<Integer> primeNumbers = new ArrayList<>();
+  ArrayList<Integer> primeNumbers = new ArrayList<>();
 
     /* 
      * returnVar is for isPrimeNumber function
      * Because I cannot pass var inside to ArrayList's forEach
      * I just know this way to pass.
      */
-  static boolean returnVar;
+  boolean returnVar;
 
     /*
      * nIsPrimeNumber is mark user input int is prime number or not.
      */
-  static boolean nIsPrimeNumber = false;
+  boolean nIsPrimeNumber = true;
 
-  static boolean isPrimeNumber(int n) {
+  Integer userNumber ;
+
+  boolean isPrimeNumber(int n) {
     returnVar = true; 
     // 1 is not prime number.
     if ( n == 1 ) {
@@ -39,40 +41,46 @@ public class PrimeCheck {
     return returnVar;
   }
 
-  static int getUserInteger() {
+  // check the User input integer.
+  void primeChecker(Integer i) {
+    i += 1 ;
+    // the last element in PrimeNumbers List.
+    Integer lastPrimeNumberInList = 1;
+    if ( this.primeNumbers.size() != 0 ) {
+      // get the last element from primeNumbers List.
+      lastPrimeNumberInList = this.primeNumbers.get( this.primeNumbers.size() - 1 ) ;
+    } 
+    // Is i Prime Number ?
+    if ( this.isPrimeNumber(i) ) {
+      // Add i to primeNumbers List if i is Prime Number.
+      this.primeNumbers.add(i);
+      // Check the user's input Integer can divide by i.
+      if ( ( this.userNumber % i ) == 0 ) {
+        // If can divide by i, it isn't Prime Number.
+        this.nIsPrimeNumber = false;
+      } else {
+        // Check i is small and inside the possible Integer range.
+        if ( i < ( this.userNumber / lastPrimeNumberInList ) ) {
+          // Check again.
+          primeChecker(i);
+        }
+      }
+    } else {
+      // If now the i isn't Prime Number.
+      // and the i still inside the possible Integer range
+      if ( i <  ( this.userNumber / lastPrimeNumberInList ) ) {
+        // Check again.
+        primeChecker(i);
+      }
+    }
+  }
+
+  // Get User Input positive Integer from console.
+  void getUserInteger() {
     Scanner userInputNumber = new Scanner(System.in);
     System.out.println("Enter a positive integer.");
-    int userNumber = userInputNumber.nextInt();
+    this.userNumber = userInputNumber.nextInt();
     userInputNumber.close();
-    return userNumber;
   }
 
-  public static void main(String[] args) {
-
-    int userNumber = getUserInteger();
-
-
-    // find all prime number that is small then user Input Number.
-    // and bigger then 1.
-    for (int i = 2; i < (userNumber + 1); i++ ) {
-      if (isPrimeNumber(i)) {
-	// If find a prime number add into primeNumbers array list.
-        primeNumbers.add(i);
-      }
-    }
-
-    // check user input number is or isn't in primeNumbers list.
-    // if user input number is in primeNumbers that is prime number.
-    primeNumbers.forEach((p) -> {
-      if ( p == userNumber ) {
-        nIsPrimeNumber = true;
-      }
-    });
-
-    if (nIsPrimeNumber) {
-      System.out.println("You input is Prime Number.");
-    } else {
-      System.out.println("You input isn't Prime Number.");
-    }
-  }
 }
